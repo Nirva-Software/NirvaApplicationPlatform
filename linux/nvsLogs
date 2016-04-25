@@ -1,0 +1,6 @@
+#!/bin/bash
+
+#DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+LOG=/home/nirva/log/nirva_daemon.log
+
+$NIRVA/Bin/nvs &>> $LOG

@@ -1,0 +1,84 @@
+#! /bin/sh
+### BEGIN INIT INFO
+# Provides:          nirva
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start nirva server daemon
+### END INIT INFO
+
+#set -e
+
+# Install script : update-rc.d nirva defaults 99
+
+NAME=nirva
+NIRVA=/home/nirva/bin/nirva
+DAEMON=${NIRVA}/Bin/nvsLogs
+DESC="Nirva server"
+USER=nirva
+GROUP=nirva
+LOG=/home/nirva/log/nirva_daemon.log
+PIDFILE=${NIRVA}/Bin/nirva.run
+
+test -x $DAEMON || exit 0
+
+RETRY=TERM/180/KILL/5
+
+export PATH="${PATH:+$PATH:}${NIRVA}/Bin"
+export LD_LIBRARY_PATH="${LD_LIBRARY_PATH:+$LD_LIBRARY_PATH:}${NIRVA}/Bin"
+export NIRVA
+export LANG=fr_FR.UTF-8
+
+# define LSB log_* functions.
+. /lib/lsb/init-functions
+
+case "$1" in
+  start)
+        echo -n "Starting $DESC at " >> $LOG
+        date >> $LOG
+    log_daemon_msg "Starting $DESC"
+        start-stop-daemon --oknodo --start \
+          --exec $DAEMON --chuid $USER:$GROUP
+    case "$?" in
+        0) log_end_msg 0 ;;
+        *) log_end_msg 1; exit 1 ;;
+    esac
+        ;;
+  stop)
+    log_daemon_msg "Stopping $DESC"
+        start-stop-daemon --oknodo --stop --pidfile "$PIDFILE" --retry $RETRY
+RES_CODE=$?
+        echo -n "$DESC stopped at " >> $LOG
+        date >> $LOG
+    case "$RES_CODE" in
+        0) log_end_msg 0 ;;
+        *) log_end_msg 1; exit 1 ;;
+    esac
+        ;;
+  status)
+        if [ -f "$PIDFILE" ]; then
+                PID=`cat $PIDFILE`
+                if [ -z "`ps axf | grep ${PID} | grep -v grep`" ]; then
+                        printf "%s\n" "Process dead but pidfile exists"
+                        exit 1
+                else
+                        echo "$DESC is running"
+                        exit 0
+                fi
+        else
+                echo "$DESC is NOT running"
+                exit 1
+        fi
+   ;;
+  restart|force-reload)
+        $0 stop
+        $0 start
+        ;;
+  *)
+    echo "Usage: /etc/init.d/$NAME {start|stop|restart|force-reload}" >&2
+        exit 1
+        ;;
+esac
+
+exit 0
