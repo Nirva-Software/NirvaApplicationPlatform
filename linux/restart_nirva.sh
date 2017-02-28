@@ -21,6 +21,7 @@ TO_EMAIL=monitor@nirva-software.com
 FROM_EMAIL=$TO_EMAIL
 NIRVA_SYSTEM_LOG=/home/nirva/log/nirva/Logs/SYSTEM/nvs.log
 NIRVA_LOG_PWD=log_admin
+SYSTEM_LOG=1
 
 # Log rotate
 LOG_FILE="${HOME}/log/"`basename $0 .sh`".log"
@@ -78,7 +79,7 @@ echo "Raise SYSTEM logs to level 6"
 $NIRVA/Bin/nvcc -u log_admin -w $NIRVA_LOG_PWD -z "NV_CMD='LOG:SET_OPTIONS' LOG='SYSTEM' SERVICE='SYSTEM' LEVEL='6'"
 
 echo "Stop Nirva"
-service nirva stop
+sudo service nirva stop
 echo -n "Stopped at "
 date
 end_stop=`date +%s`
@@ -98,11 +99,11 @@ if [ -n "$PGREP_DEBUG" ]; then
 fi
 
 echo "Start Nirva"
-service nirva start
+sudo service nirva start
 
 echo -n "Restart at "
 date
 
-echo "Sleep for 1 minute (time for Nirva server to start again) to update the log to previous level (1)"
+echo "Sleep for 1 minute (time for Nirva server to start again) to update the log to previous level (${SYSTEM_LOG})"
 sleep 60
-$NIRVA/Bin/nvcc -u log_admin -w $NIRVA_LOG_PWD -z "NV_CMD='LOG:SET_OPTIONS' LOG='SYSTEM' SERVICE='SYSTEM' LEVEL='1'"
+$NIRVA/Bin/nvcc -u log_admin -w $NIRVA_LOG_PWD -z "NV_CMD='LOG:SET_OPTIONS' LOG='SYSTEM' SERVICE='SYSTEM' LEVEL='${SYSTEM_LOG}'"
