@@ -17,4 +17,4 @@ if [ -e "$FILEPATH" ]; then
 	exit 1
 fi
 
-for i in `grep -nw "${DATE}*.xml" -e "${FIND_STR}" | cut -d: -f1`; do echo "${i%.*}.xml"; echo "${i%.*}.pdf"; done | tar -czvf "${FILEPATH}" -T -
+for i in `grep -nw ${DATE}*.xml -e "${FIND_STR}" | cut -d: -f1`; do echo "${i%.*}.xml"; echo "${i%.*}.pdf"; done | tar -czvf "${FILEPATH}" -T -
