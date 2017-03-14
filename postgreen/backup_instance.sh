@@ -152,6 +152,10 @@ if [ ! $USERNAME ]; then
 	USERNAME="postgres"
 fi;
 
+if [ ! $OVH_CLIENT ]; then
+	CURRENT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+	OVH_CLIENT="$CURRENT_PATH/ovh-api-bash-client.sh"
+fi;
 
 ###########################
 #### BACKUP  FUNCTIONS ####
@@ -190,7 +194,7 @@ function nas_snapshot()
 		for PARTITION in ${PARTITION_LIST//\// }
 		do
 	        echo "Snapshot of $NAS_NAME/$PARTITION"
-			RES=${OVH_CLIENT} --method POST --url "/dedicated/nasha/$NAS_NAME/partition/$PARTITION/customSnapshot" --data '{"name": "'${SNAP_NAME}'"}'
+			RES=`${OVH_CLIENT} --method POST --url "/dedicated/nasha/$NAS_NAME/partition/$PARTITION/customSnapshot" --data '{"name": "'${SNAP_NAME}'"}'`
 			if [[ "$RES" != 200* ]]; then
 				# Creating the snapshot failed...
 				echo "Snapshot failed with error $RES"
@@ -208,7 +212,7 @@ function nas_snapshot()
 					if [[ "$SNAP" == *$SUFFIX ]]; then
 						if [[ "$SNAP" < "$EXPIRATION_DATE" ]]; then
 							echo -e "\tRemoving $SNAP"
-							RES=${OVH_CLIENT} --method DELETE --url "/dedicated/nasha/$NAS_NAME/partition/$PARTITION/customSnapshot/$SNAP"
+							RES=`${OVH_CLIENT} --method DELETE --url "/dedicated/nasha/$NAS_NAME/partition/$PARTITION/customSnapshot/$SNAP"`
 							if [[ "$RES" != 200* ]]; then
 								# Deleting the snapshot failed...
 								echo "Deleting snapshot $NAS_NAME/$PARTITION failed with error $RES"
@@ -238,7 +242,7 @@ function nas_snapshot()
 		do
 			while true; do
 				echo -n "Checking snapshot '$NAS_NAME/$PARTITION/${SNAP_NAME}' has been created... "
-				RES=${OVH_CLIENT} --method POST --url "/dedicated/nasha/$NAS_NAME/partition/$PARTITION/customSnapshot" --data '{"name": "'${SNAP_NAME}'"}'
+				RES=`${OVH_CLIENT} --method POST --url "/dedicated/nasha/$NAS_NAME/partition/$PARTITION/customSnapshot" --data '{"name": "'${SNAP_NAME}'"}'`
 				if [[ "$RES" == 400* ]]; then
 					# Snapshot correctly created
 					echo "OK"
@@ -300,7 +304,7 @@ function nas_cleanup_snapshot()
 					if [[ "$SNAP" == *$SUFFIX ]]; then
 						if [[ "$SNAP" < "$EXPIRATION_DATE" ]]; then
 							echo -e "\tRemoving $SNAP"
-							RES=${OVH_CLIENT} --method DELETE --url "/dedicated/nasha/$NAS_NAME/partition/$PARTITION/customSnapshot/$SNAP"
+							RES=`${OVH_CLIENT} --method DELETE --url "/dedicated/nasha/$NAS_NAME/partition/$PARTITION/customSnapshot/$SNAP"`
 							if [[ "$RES" != 200* ]]; then
 								# Deleting the snapshot failed...
 								echo "Deleting snapshot $NAS_NAME/$PARTITION failed with error $RES"
