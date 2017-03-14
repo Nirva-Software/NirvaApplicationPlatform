@@ -251,6 +251,7 @@ function nas_snapshot()
 					# Unknown result! Continue with others but raise error
 					echo "Unkown error!! Continue but log to raise the error..."
 					logError error "Cannot ensure that snapshot was created for $NAS_NAME/$PARTITION" "$RES"
+					break;
 				fi
 			done
 		done
