@@ -250,9 +250,9 @@ function nas_snapshot()
 					echo "OK"
 					break;
 				elif [[ "$RES" == 404* ]]; then
-					# Snapshot is processing. Sleep for 1s.
-					echo "still processing. Will check again in 1s."
-					sleep 1;
+					# Snapshot is processing. Sleep for 10s.
+					echo "still processing. Will check again in 10s."
+					sleep 10;
 				else
 					# Unknown result! Continue with others but raise error
 					echo "Unkown error!! Continue but log to raise the error..."
