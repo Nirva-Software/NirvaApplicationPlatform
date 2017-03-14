@@ -44,11 +44,12 @@ function exitGracefully()
 		echo "\q" >&3
 
 		timeout 10 bash -c -- 'while true; do if read line ; then if [[ "$line" == "ROLLBACK" ]]; then echo "$line"; break; else echo "$line"; fi; fi;done' <"${FIFO_OUTPUT}"
+		RETVAL=$?
 
-		if [[ "$?" -eq 124 ]]; then
+		if [[ "$RETVAL" -eq 124 ]]; then
 			# Error in the backup, kill the connection...
 			echo "Backup failed when unlocking, kill the pgsql connection...";
-			logError error "The lock connection to database could not be released... Kill it, but you have to check the log to see what went wrong..." "Timeout return: $?"
+			logError error "The lock connection to database could not be released... Kill it, but you have to check the log to see what went wrong..." "Timeout return: $RETVAL"
 			kill -9 ${SUB_PID}
 		fi
 
@@ -439,7 +440,7 @@ timeout 60 bash -c -- 'while true; do if read line ; then if [[ "$line" == "LOCK
 RETVAL=$?
 
 echo "Timeout returns: $RETVAL#"
-if [[ "$?" -eq 124 ]]; then
+if [[ "$RETVAL" -eq 124 ]]; then
 	# Cannot get lock... Stop the backup and raise error
 	echo "Cannot get lock... Stop the backup, kill the pgsql connection and raise error...";
 	logError error "Cannot get the lock on the Database server ${HOSTNAME}" ""
