@@ -10,5 +10,5 @@ install:
 	curl -Ls -o backup_instance.sh https://raw.githubusercontent.com/Nirva-Software/NirvaApplicationPlatform/master/postgreen/backup_instance.sh
 	curl -Ls -o send_email.sh https://raw.githubusercontent.com/Nirva-Software/NirvaApplicationPlatform/master/postgreen/send_email.sh
 	curl -Ls -o log_rotation.sh https://raw.githubusercontent.com/Nirva-Software/NirvaApplicationPlatform/master/postgreen/log_rotation.sh
-	chmod +x backup_instance.sh send_email.sh log_rotation.sh
+	chmod +x backup_instance.sh send_email.sh log_rotation.sh
 	curl -Ls -o backup.config https://raw.githubusercontent.com/Nirva-Software/NirvaApplicationPlatform/master/postgreen/backup.config
