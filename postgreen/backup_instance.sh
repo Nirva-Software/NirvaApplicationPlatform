@@ -157,6 +157,7 @@ if [ ! $OVH_CLIENT ]; then
 	CURRENT_PATH="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 	OVH_CLIENT="$CURRENT_PATH/ovh-api-bash-client.sh"
 fi;
+#HOST_PARAM=-h 127.0.0.1
 
 ###########################
 #### BACKUP  FUNCTIONS ####
@@ -352,7 +353,7 @@ function db_backups()
 	echo -e "\n\nPerforming schema-only backups"
 	echo -e "--------------------------------------------\n"
  
-	SCHEMA_ONLY_DB_LIST=`ssh ${HOSTNAME} "psql -h 127.0.0.1 -U \"$USERNAME\" -At -c \"$SCHEMA_ONLY_QUERY\" postgres"`
+	SCHEMA_ONLY_DB_LIST=`ssh ${HOSTNAME} "psql ${HOST_PARAM} -U \"$USERNAME\" -At -c \"$SCHEMA_ONLY_QUERY\" postgres"`
  
 	echo -e "The following databases were matched for schema-only backup:\n${SCHEMA_ONLY_DB_LIST}\n"
  
@@ -360,7 +361,7 @@ function db_backups()
 	do
 	        echo "Schema-only backup of $DATABASE"
  
-	        if ! ssh ${HOSTNAME} "pg_dump -Fp -s -h 127.0.0.1 -U \"$USERNAME\" \"$DATABASE\" | gzip -c" > $FINAL_BACKUP_DIR"$DATABASE"_SCHEMA.sql.gz.in_progress; then
+	        if ! ssh ${HOSTNAME} "pg_dump -Fp -s ${HOST_PARAM} -U \"$USERNAME\" \"$DATABASE\" | gzip -c" > $FINAL_BACKUP_DIR"$DATABASE"_SCHEMA.sql.gz.in_progress; then
 	                echo "[!!ERROR!!] Failed to backup database schema of $DATABASE" 1>&2
 					logError error "[!!ERROR!!] Failed to backup database schema of $DATABASE" ""
 	        else
@@ -383,7 +384,7 @@ function db_backups()
 	echo -e "\n\nPerforming full backups"
 	echo -e "--------------------------------------------\n"
  
-	for DATABASE in `ssh ${HOSTNAME} "psql -h 127.0.0.1 -U \"$USERNAME\" -At -c \"$FULL_BACKUP_QUERY\" postgres"`
+	for DATABASE in `ssh ${HOSTNAME} "psql ${HOST_PARAM} -U \"$USERNAME\" -At -c \"$FULL_BACKUP_QUERY\" postgres"`
 	do
 		if [ $ENABLE_PLAIN_BACKUPS = "yes" ]
 		then
@@ -431,7 +432,7 @@ echo "Subshell: ${SUB_PID}#"
 
 exec 3> "${FIFO_FILE}";
 
-echo "psql -h 127.0.0.1 -U \"$USERNAME\" \"$LOCK_DATABASE\"" >&3
+echo "psql ${HOST_PARAM} -U \"$USERNAME\" \"$LOCK_DATABASE\"" >&3
 echo "BEGIN;" >&3
 # The locked tables are the ones with storage content
 echo "LOCK TABLE ${LOCK_TABLES} IN EXCLUSIVE MODE;" >&3
