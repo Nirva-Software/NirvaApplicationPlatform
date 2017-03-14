@@ -1,0 +1,14 @@
+LIBS_FOLDER = "./libs/"
+
+install:
+	curl -Ls https://raw.githubusercontent.com/Nirva-Software/ovh-api-bash-client/master/ovh-api-bash-client.sh
+	chmod +x /usr/local/bin/ovh-api-bash-client.sh
+	
+	curl -Ls -o $(LIBS_FOLDER)/JSON.sh --create-dirs https://github.com/dominictarr/JSON.sh/raw/master/JSON.sh
+	chmod +x $(LIBS_FOLDER)/*
+
+	curl -Ls https://raw.githubusercontent.com/Nirva-Software/NirvaApplicationPlatform/master/postgreen/backup_instance.sh
+	curl -Ls https://raw.githubusercontent.com/Nirva-Software/NirvaApplicationPlatform/master/postgreen/send_email.sh
+	curl -Ls https://raw.githubusercontent.com/Nirva-Software/NirvaApplicationPlatform/master/postgreen/log_rotation.sh
+	chmod +x backup_instance.sh send_email.sh log_rotation.sh
+	curl -Ls https://raw.githubusercontent.com/Nirva-Software/NirvaApplicationPlatform/master/postgreen/backup.config
