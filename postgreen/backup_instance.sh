@@ -472,8 +472,10 @@ if [ $DAY_OF_MONTH -eq 1 ];
 then
 	db_backups "-monthly"
  
-	# Delete all expired monthly directories. 10 is arbitrary, we just want to remove any backup older than the one we just made...
-	find $BACKUP_DIR -maxdepth 1 -mtime +10 -name "*-monthly" -exec rm -rf '{}' ';'
+#	# Delete all expired monthly directories. 10 is arbitrary, we just want to remove any backup older than the one we just made...
+#	find $BACKUP_DIR -maxdepth 1 -mtime +10 -name "*-monthly" -exec rm -rf '{}' ';'
+	# Delete all DB backup. The snapshot contains all the necessary backups...
+	find $BACKUP_DIR -maxdepth 1 ( -name "*-monthly" -o -name "*-weekly" -o -name "*-daily" ) -exec rm -rf '{}' ';'
  
 	nas_snapshot "-monthly"
  
@@ -487,9 +489,11 @@ EXPIRED_DAYS=`expr $((($WEEKS_TO_KEEP * 7) + 1))`
  
 if [ $DAY_OF_WEEK = $DAY_OF_WEEK_TO_KEEP ];
 then
-	# Delete all expired weekly directories
-	# No need to use +$EXPIRED_DAYS, we only need the last backup, so +1
-	find $BACKUP_DIR -maxdepth 1 -mtime +1 -name "*-weekly" -exec rm -rf '{}' ';'
+#	# Delete all expired weekly directories
+#	# No need to use +$EXPIRED_DAYS, we only need the last backup, so +1
+#	find $BACKUP_DIR -maxdepth 1 -mtime +1 -name "*-weekly" -exec rm -rf '{}' ';'
+ 	# Delete all DB backup. The snapshot contains all the necessary backups...
+	find $BACKUP_DIR -maxdepth 1 ( -name "*-monthly" -o -name "*-weekly" -o -name "*-daily" ) -exec rm -rf '{}' ';'
  
 	db_backups "-weekly"
  
@@ -500,9 +504,11 @@ fi
  
 # DAILY BACKUPS
  
-# Delete daily backups 7 days old or more
-# No need to use +$((DAYS_TO_KEEP+1)), we only need the last backup, so +1
-find $BACKUP_DIR -maxdepth 1 -mtime +1 -name "*-daily" -exec rm -rf '{}' ';'
+## Delete daily backups 7 days old or more
+## No need to use +$((DAYS_TO_KEEP+1)), we only need the last backup, so +1
+#find $BACKUP_DIR -maxdepth 1 -mtime +1 -name "*-daily" -exec rm -rf '{}' ';'
+# Delete all DB backup. The snapshot contains all the necessary backups...
+find $BACKUP_DIR -maxdepth 1 ( -name "*-monthly" -o -name "*-weekly" -o -name "*-daily" ) -exec rm -rf '{}' ';'
  
 db_backups "-daily"
 
