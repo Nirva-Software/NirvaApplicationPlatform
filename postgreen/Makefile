@@ -2,7 +2,7 @@ LIBS_FOLDER = "./libs/"
 
 install:
 	curl -Ls -o ovh-api-bash-client.sh https://raw.githubusercontent.com/Nirva-Software/ovh-api-bash-client/master/ovh-api-bash-client.sh
-	chmod +x /usr/local/bin/ovh-api-bash-client.sh
+	chmod +x ovh-api-bash-client.sh
 	
 	curl -Ls -o $(LIBS_FOLDER)/JSON.sh --create-dirs https://github.com/dominictarr/JSON.sh/raw/master/JSON.sh
 	chmod +x $(LIBS_FOLDER)/*
