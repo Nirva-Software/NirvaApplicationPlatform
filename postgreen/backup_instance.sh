@@ -36,7 +36,7 @@ function exitGracefully()
 {
 	# Catch the original error code, to propagate it.
 	ERROR_CODE=$?
-	trap - SIGTERM # Remove the SIGTERM trap. This is to avoid to loop on the kill/traps because of the future 'kill -- -$$' command.
+	trap - SIGINT EXIT # Remove the SIGINT and EXIT trap. This is to avoid to loop on the kill/traps because of the future 'kill -- -$$' command.
 	if [[ "$ERROR_CODE" -eq 0 ]]; then
 		# This is the standard exit. We close everything properly.
 		echo "ROLLBACK;" >&3
@@ -62,8 +62,8 @@ function exitGracefully()
 		echo "\q" >&3
 	fi
 	# We will kill the children, but this includes killing ourselves... So trap the kill to exit with the desired exit code.
-	trap "cleanupAndExit $ERROR_CODE" SIGTERM
-	kill -- -$$ # Kill ourselves and the sub processes (ssh connection).
+	trap "cleanupAndExit $ERROR_CODE" SIGINT
+	kill -s SIGINT 0 # Kill ourselves and the sub processes (ssh connection) with the SIGINT signal.
 }
 function cleanupAndExit()
 {
@@ -82,7 +82,7 @@ function cleanupAndExit()
 	echo "Cleanup done. Exit with $ERROR_CODE."
 	exit $ERROR_CODE;
 }
-trap "exitGracefully" EXIT # SIGINT SIGTERM EXIT
+trap "exitGracefully" EXIT SIGINT SIGTERM SIGHUP
 
 
 ###########################
