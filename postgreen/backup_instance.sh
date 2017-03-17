@@ -48,7 +48,7 @@ function exitGracefully()
 
 		if [[ "$RETVAL" -eq 124 ]]; then
 			# Error in the backup, kill the connection...
-			echo "Backup failed when unlocking, kill the pgsql connection...";
+			echo -e "Timeout error ($RETVAL).\nBackup failed when unlocking, kill the pgsql connection...";
 			logError error "The lock connection to database could not be released... Kill it, but you have to check the log to see what went wrong..." "Timeout return: $RETVAL"
 			kill -9 ${SUB_PID}
 		fi
@@ -255,7 +255,7 @@ function nas_snapshot()
 					sleep 10;
 				else
 					# Unknown result! Continue with others but raise error
-					echo "Unkown error!! Continue but log to raise the error..."
+					echo "Unkown error!! Continue but log to raise the error...\nAPI return: $RES\n"
 					logError error "Cannot ensure that snapshot was created for $NAS_NAME/$PARTITION" "$RES"
 					break;
 				fi
