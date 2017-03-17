@@ -69,8 +69,8 @@ function cleanupAndExit()
 {
 	ERROR_CODE=$1
 	# Remove the FIFO handles if they have been created
-	if [ -z ${FIFO_FILE+x} ]; then rm "${FIFO_FILE}"; fi
-	if [ -z ${FIFO_OUTPUT+x} ]; then rm "${FIFO_OUTPUT}"; fi
+	if [ ! -z ${FIFO_FILE+x} ]; then rm "${FIFO_FILE}"; fi
+	if [ ! -z ${FIFO_OUTPUT+x} ]; then rm "${FIFO_OUTPUT}"; fi
 
 	# Send the email if there is an email content...
 	if [ -n "$ERROR_CONTENT" ]; then # This tests if the variable is not empty
