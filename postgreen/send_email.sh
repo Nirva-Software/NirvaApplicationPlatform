@@ -25,7 +25,9 @@ MAIL="/tmp/send_email_$$.txt"
 rm -f $MAIL
 echo "To: ${TO_EMAIL}" > $MAIL
 echo "From: ${FROM_EMAIL}" >> $MAIL
-echo "Subject: $1"$'\n' >> $MAIL
+echo "Subject: $1" >> $MAIL
+echo "Mime-Version: 1.0;" >> $MAIL
+echo -e 'Content-Type: text/html; charset="UTF-8";\n' >> $MAIL
 echo -e "$2" >> $MAIL
 echo "" >> $MAIL
 /usr/sbin/ssmtp ${TO_EMAIL} < $MAIL
