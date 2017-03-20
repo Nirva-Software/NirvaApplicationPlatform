@@ -466,7 +466,7 @@ elif [[ "$BACKUP_MODE" == "cleanup" ]]; then
 	# Delete all backup directories.
 	find $BACKUP_DIR -maxdepth 1 -name "*-backup" -exec rm -rf '{}' ';'
 
-	nas_cleanup_snapshot "-cleanup"
+	nas_cleanup_snapshot "-backup"
 
 	exit 0;
 fi
