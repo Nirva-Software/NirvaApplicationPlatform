@@ -199,8 +199,8 @@ function nas_snapshot()
 			RES=`${OVH_CLIENT} --method POST --url "/dedicated/nasha/$NAS_NAME/partition/$PARTITION/customSnapshot" --data '{"name": "'${SNAP_NAME}'"}'`
 			if [[ "$RES" != 200* ]]; then
 				# Creating the snapshot failed...
-				echo "Snapshot failed with error $RES"
-				logError warning "Cannot create snapshot for $NAS_NAME/$PARTITION" "$RES"
+				echo "Snapshot ${SNAP_NAME} failed with error $RES"
+				logError warning "Cannot create snapshot ${SNAP_NAME} for $NAS_NAME/$PARTITION" "$RES"
 			fi
 
 			echo "Cleaning old backups before $EXPIRATION_DATE"
@@ -217,8 +217,8 @@ function nas_snapshot()
 							RES=`${OVH_CLIENT} --method DELETE --url "/dedicated/nasha/$NAS_NAME/partition/$PARTITION/customSnapshot/$SNAP"`
 							if [[ "$RES" != 200* ]]; then
 								# Deleting the snapshot failed...
-								echo "Deleting snapshot $NAS_NAME/$PARTITION failed with error $RES"
-								logError error "Deleting snapshot $NAS_NAME/$PARTITION failed" "$RES"
+								echo "Deleting snapshot $NAS_NAME/$PARTITION/$SNAP failed with error $RES"
+								logError error "Deleting snapshot $NAS_NAME/$PARTITION/$SNAP failed" "$RES"
 							fi
 						else
 							echo -e "\t$SNAP: keeping snapshot"
@@ -309,8 +309,8 @@ function nas_cleanup_snapshot()
 							RES=`${OVH_CLIENT} --method DELETE --url "/dedicated/nasha/$NAS_NAME/partition/$PARTITION/customSnapshot/$SNAP"`
 							if [[ "$RES" != 200* ]]; then
 								# Deleting the snapshot failed...
-								echo "Deleting snapshot $NAS_NAME/$PARTITION failed with error $RES"
-								logError error "Deleting snapshot $NAS_NAME/$PARTITION failed" "$RES"
+								echo "Deleting snapshot $NAS_NAME/$PARTITION/$SNAP failed with error $RES"
+								logError error "Deleting snapshot $NAS_NAME/$PARTITION/$SNAP failed" "$RES"
 							fi
 						else
 							echo -e "\t$SNAP: keeping snapshot"
