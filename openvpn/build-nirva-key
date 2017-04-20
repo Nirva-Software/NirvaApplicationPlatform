@@ -1,0 +1,34 @@
+#!/bin/bash
+
+help() {
+    echo "Usage: $0 <server_name> <server_ip_in_vpn>"
+    echo "Caution: We do not check that the vpn ip is unique!! Choose it wisely!"
+    exit 1
+}
+
+[[ "$#" -eq 2 && -n "$1" && -n "$2" ]] || help
+
+echo "Building key for $1."
+
+cd /etc/openvpn/easy-rsa
+
+./build-key $1
+
+cp client.conf.sample client.conf
+#sed -i 's/<server_name>/'"$1"'/g' client.conf
+#tar -czvf "/home/nirva/tmp/${1}.tar.gz" -C /etc/openvpn/easy-rsa/ "keys/${1}.crt" "keys/${1}.key" keys/ca.crt keys/ta.key client.conf
+#chown nirva:nirva "/home/nirva/tmp/${1}.tar.gz"
+#rm client.conf
+echo -e "<cert>" >> client.conf
+tail -n +$(grep -m1 -n "BEGIN CERTIFICATE" keys/${1}.crt | cut -d: -f1) keys/${1}.crt >> client.conf
+echo -e "</cert>" >> client.conf
+echo -e "<key>" >> client.conf
+cat keys/${1}.key >> client.conf
+echo -e "</key>" >> client.conf
+mv client.conf "/home/nirva/tmp/${1}.conf"
+chown nirva:nirva "/home/nirva/tmp/${1}.conf"
+
+# Add entry to ipp.txt then reload
+service openvpn stop
+echo "${1},${2}" >> /etc/openvpn/ipp.txt
+service openvpn start
