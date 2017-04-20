@@ -15,10 +15,6 @@ cd /etc/openvpn/easy-rsa
 ./build-key $1
 
 cp client.conf.sample client.conf
-#sed -i 's/<server_name>/'"$1"'/g' client.conf
-#tar -czvf "/home/nirva/tmp/${1}.tar.gz" -C /etc/openvpn/easy-rsa/ "keys/${1}.crt" "keys/${1}.key" keys/ca.crt keys/ta.key client.conf
-#chown nirva:nirva "/home/nirva/tmp/${1}.tar.gz"
-#rm client.conf
 echo -e "<cert>" >> client.conf
 tail -n +$(grep -m1 -n "BEGIN CERTIFICATE" keys/${1}.crt | cut -d: -f1) keys/${1}.crt >> client.conf
 echo -e "</cert>" >> client.conf
@@ -32,3 +28,5 @@ chown nirva:nirva "/home/nirva/tmp/${1}.conf"
 service openvpn stop
 echo "${1},${2}" >> /etc/openvpn/ipp.txt
 service openvpn start
+
+echo "Done to /home/nirva/tmp/${1}.conf."
