@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [[ "$HOME" == "" ]]; then
+    HOME=$(cat /etc/passwd | grep -e "^zabbix" | cut -d: -f6)
+fi
+
 if [[ -e "$HOME/.pod" ]]; then
     NIRVA=$(cat $HOME/.pod | cut -d: -f1)
     NV_USER=$(cat $HOME/.pod | cut -d: -f2)
