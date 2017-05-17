@@ -30,7 +30,6 @@ if [ -d "$CODE" ]; then
 fi
 
 cp -R template $CODE
-sed -i "s/<meta http-equiv=\"REFRESH\" content=\"0; URL=https:\/\/clients\.post-green\.net\/\" \/>/<meta http-equiv=\"REFRESH\" content=\"0; URL=https:\/\/$DOMAIN\/\" \/>/" $CODE/index.html
 sed -i "s/\\\${APPLICATION_NAME}/${APPLICATION_NAME}/g" $CODE/error.htm
 
 cd $OLD_REP
