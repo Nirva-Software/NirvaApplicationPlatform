@@ -52,22 +52,22 @@ OLD_REP=`pwd`
 
 # Generate static pages for Apache
 cd /var/www
-if [ -d "${CODE}.conf" ]; then
-  echo "Removing Old directory /var/www/${CODE}.conf"
-  [ -d "${CODE}.conf.bak" ] && rm -R "${CODE}.conf.bak"
-  mv "${CODE}.conf" "${CODE}.conf.bak"
+if [ -d "${CODE}_${MODE}.conf" ]; then
+  echo "Removing Old directory /var/www/${CODE}_${MODE}.conf"
+  [ -d "${CODE}_${MODE}.conf.bak" ] && rm -R "${CODE}_${MODE}.conf.bak"
+  mv "${CODE}_${MODE}.conf" "${CODE}_${MODE}.conf.bak"
 fi
-cp -R template ${CODE}.conf
-sed -i "s/\\\${APPLICATION_NAME}/${APPLICATION_NAME}/g" ${CODE}.conf/error.htm
+cp -R template ${CODE}_${MODE}.conf
+sed -i "s/\\\${APPLICATION_NAME}/${APPLICATION_NAME}/g" ${CODE}_${MODE}.conf/error.htm
 
 # Generate apache site from template
 cd /etc/apache2/sites-available/
 
-cp "apache_template_${MODE}.conf" ${CODE}.conf
-sed -i "s/server_name/$DOMAIN/g" ${CODE}.conf
-sed -i "s/\/var\/www\/site_folder/\/var\/www\/${CODE}.conf/g" ${CODE}.conf
-sed -i "s~SSLCertificateFile /etc/apache2/ssl/certificate.crt~SSLCertificateFile $CERT~" ${CODE}.conf
-sed -i "s~SSLCertificateKeyFile /etc/apache2/ssl/certificate.key~SSLCertificateKeyFile $CERT_KEY~" ${CODE}.conf
-sed -i "s~SSLCACertificateFile /etc/apache2/ssl/CAcertificate.pem~SSLCACertificateFile $CERT_CA~" ${CODE}.conf
+cp "apache_template_${MODE}.conf" ${CODE}_${MODE}.conf
+sed -i "s/server_name/$DOMAIN/g" ${CODE}_${MODE}.conf
+sed -i "s/\/var\/www\/site_folder/\/var\/www\/${CODE}_${MODE}.conf/g" ${CODE}_${MODE}.conf
+sed -i "s~SSLCertificateFile /etc/apache2/ssl/certificate.crt~SSLCertificateFile $CERT~" ${CODE}_${MODE}.conf
+sed -i "s~SSLCertificateKeyFile /etc/apache2/ssl/certificate.key~SSLCertificateKeyFile $CERT_KEY~" ${CODE}_${MODE}.conf
+sed -i "s~SSLCACertificateFile /etc/apache2/ssl/CAcertificate.pem~SSLCACertificateFile $CERT_CA~" ${CODE}_${MODE}.conf
 
 cd $OLD_REP
