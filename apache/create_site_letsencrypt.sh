@@ -6,7 +6,6 @@ die () {
 }
 
 set -e # Exits at first failure
-set -u # Exits when a non initialized variable is used
 
 if [[ $EUID -ne 0 ]]; then
    die "This script must be run as root"
