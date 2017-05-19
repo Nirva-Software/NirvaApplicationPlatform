@@ -63,7 +63,7 @@ sed -i "s/\\\${APPLICATION_NAME}/${APPLICATION_NAME}/g" ${CODE}_${MODE}.conf/err
 # Generate apache site from template
 cd /etc/apache2/sites-available/
 
-cp "apache_template_${MODE}.conf" ${CODE}_${MODE}.conf
+cp "${MODE}_apache_template.conf" ${CODE}_${MODE}.conf
 sed -i "s/server_name/$DOMAIN/g" ${CODE}_${MODE}.conf
 sed -i "s/\/var\/www\/site_folder/\/var\/www\/${CODE}_${MODE}.conf/g" ${CODE}_${MODE}.conf
 sed -i "s~SSLCertificateFile /etc/apache2/ssl/certificate.crt~SSLCertificateFile $CERT~" ${CODE}_${MODE}.conf
