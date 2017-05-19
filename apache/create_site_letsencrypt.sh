@@ -24,4 +24,4 @@ APPLICATION_NAME=$4
 CERT_DOMAIN=$5
 [[ -z "$CERT_DOMAIN" ]] && CERT_DOMAIN="$DOMAIN"
 
-./create_site.sh "$MODE" "$CODE" "$DOMAIN" "$CERT_DOMAIN/fullchain.pem" "$CERT_DOMAIN/privkey.pem" "$CERT_DOMAIN/cert.pem" "$APPLICATION_NAME"
+./create_site.sh "$MODE" "$CODE" "$DOMAIN" "$CERT_DOMAIN/cert.pem" "$CERT_DOMAIN/privkey.pem" "$CERT_DOMAIN/fullchain.pem" "$APPLICATION_NAME"
