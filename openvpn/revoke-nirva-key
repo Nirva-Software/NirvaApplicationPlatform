@@ -11,11 +11,11 @@ echo "Revoking key for $1."
 
 cd /etc/openvpn/easy-rsa
 
-./revoke-full $1
+./revoke-full $1
 
 # Remove entry from ipp.txt then reload
 service openvpn stop
-sed -i.bak '/^$1/d' /etc/openvpn/ipp.txt
+sed -i.$(date +"%Y%m%d").bak "/^$1/d" /etc/openvpn/ipp.txt
 service openvpn start
 
 echo "Certificate revoked."
