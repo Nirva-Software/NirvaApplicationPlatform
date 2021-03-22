@@ -10,7 +10,8 @@ Type=forking
 User=nirva
 Group=nirva
 Environment="NIRVA=/home/nirva/bin/nirva"
-Environment=LANG=fr_FR.UTF-8
+Environment="LD_LIBRARY_PATH=/home/nirva/bin/nirva/Bin"
+#Environment=LANG=fr_FR.UTF-8
 PIDFile=/home/nirva/bin/nirva/Bin/nirva.run
 ExecStart=/home/nirva/bin/nirva/Bin/nvsLogs
 TimeoutStartSec=infinity
